@@ -14,7 +14,6 @@ if B.check_plugins {
 end
 
 M.py_files = require 'plenary.scandir'.scan_dir(B.get_source_dot_dir(M.source, 'py'), { hidden = true, depth = 64, add_dirs = false, })
-print("vim.inspect(M.py_files):", vim.inspect(M.py_files))
 
 function M.run_in()
   function M.run_in_cmdline()
