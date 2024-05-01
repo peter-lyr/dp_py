@@ -15,6 +15,8 @@ end
 
 M.py_files = require 'plenary.scandir'.scan_dir(B.get_source_dot_dir(M.source, 'py'), { hidden = true, depth = 64, add_dirs = false, })
 
+M.pip_install_flag = '-i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host mirrors.aliyun.com'
+
 function M.run_in()
   function M.run_in_cmdline()
     B.cmd('!chcp 65001 && %s', B.rep(B.buf_get_name()))
@@ -68,20 +70,53 @@ function M.run_sel_py()
   end
 end
 
+function M.pip()
+  function M.pip_install()
+    local module = vim.fn.input 'pip install '
+    B.system_run('start', 'pip install %s %s && pause', module, M.pip_install_flag)
+  end
+
+  function M.pip_uninstall()
+    local module = vim.fn.input 'pip uninstall '
+    B.system_run('start', 'pip uninstall %s && pause', module)
+  end
+
+  function M.pip_copycmd(install)
+    local module = vim.fn.input(string.format('copy to clipboard: pip %s ', install))
+    vim.fn.setreg('+',
+      string.format(
+        'pip %s %s %s && pause',
+        install, module, M.pip_install_flag
+      )
+    )
+  end
+end
+
 M.run_in()
 
 require 'which-key'.register {
-  ['<leader>p'] = { name = 'dp_py', },
-  ['<leader>pr'] = { name = 'dp_py.run', },
-  ['<leader>prc'] = { function() M.run_in_cmdline() end, 'dp_py.run: run_in_cmdline', silent = true, mode = { 'n', 'v', }, },
-  ['<leader>prt'] = { function() M.run_in_terminal() end, 'dp_py.run: run_in_terminal', silent = true, mode = { 'n', 'v', }, },
-  ['<leader>pra'] = { function() M.run_in_asyncrun() end, 'dp_py.run: run_in_asyncrun', silent = true, mode = { 'n', 'v', }, },
+  ['<leader>p'] = { name = 'python', },
+  ['<leader>pr'] = { name = 'python.run', },
+  ['<leader>prc'] = { function() M.run_in_cmdline() end, 'python.run: run_in_cmdline', silent = true, mode = { 'n', 'v', }, },
+  ['<leader>prt'] = { function() M.run_in_terminal() end, 'python.run: run_in_terminal', silent = true, mode = { 'n', 'v', }, },
+  ['<leader>pra'] = { function() M.run_in_asyncrun() end, 'python.run: run_in_asyncrun', silent = true, mode = { 'n', 'v', }, },
 }
 
 M.run_sel_py()
 
 require 'which-key'.register {
-  ['<leader>prs'] = { function() M.run_sel() end, 'dp_py.run: run_sel', silent = true, mode = { 'n', 'v', }, },
+  ['<leader>prs'] = { function() M.run_sel() end, 'python.run: run_sel', silent = true, mode = { 'n', 'v', }, },
+}
+
+M.pip()
+
+require 'which-key'.register {
+  ['<leader>pp'] = { name = 'python.pip', },
+  ['<leader>ppi'] = { function() M.pip_install() end, 'python.pip: pip_install', silent = true, mode = { 'n', 'v', }, },
+  ['<leader>ppu'] = { function() M.pip_uninstall() end, 'python.pip: pip_uninstall', silent = true, mode = { 'n', 'v', }, },
+  ['<leader>ppc'] = { name = 'python.pip.copycmd', },
+  ['<leader>ppci'] = { function() M.pip_copycmd 'install' end, 'python.pip.copycmd: install', silent = true, mode = { 'n', 'v', }, },
+  ['<leader>ppcu'] = { function() M.pip_copycmd 'uninstall' end, 'python.pip.copycmd: uninstall', silent = true, mode = { 'n', 'v', }, },
 }
 
 return M
