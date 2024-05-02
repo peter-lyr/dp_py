@@ -17,6 +17,11 @@ M.py_files = require 'plenary.scandir'.scan_dir(B.get_source_dot_dir(M.source, '
 
 M.pip_install_flag = '-i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host mirrors.aliyun.com'
 
+M.list = {
+  'neovim',
+  'pypiwin32'
+}
+
 function M.run_in()
   function M.run_in_cmdline()
     B.cmd('!chcp 65001 && %s', B.rep(B.buf_get_name()))
@@ -71,9 +76,14 @@ function M.run_sel_py()
 end
 
 function M.pip()
-  function M.pip_install()
+  function M.pip_install_single()
     local module = vim.fn.input 'pip install '
     B.system_run('start', 'pip install %s %s && pause', module, M.pip_install_flag)
+  end
+
+  function M.pip_install_all()
+    B.print('pip install %s %s && pause', vim.fn.join(M.list, ' '), M.pip_install_flag)
+    B.system_run('start', 'pip install %s %s && pause', vim.fn.join(M.list, ' '), M.pip_install_flag)
   end
 
   function M.pip_uninstall()
@@ -120,7 +130,9 @@ M.pip()
 
 require 'which-key'.register {
   ['<leader>pp'] = { name = 'python.pip', },
-  ['<leader>ppi'] = { function() M.pip_install() end, 'python.pip: pip_install', silent = true, mode = { 'n', 'v', }, },
+  ['<leader>ppi'] = {name='python.pip.install'},
+  ['<leader>ppis'] = { function() M.pip_install_single() end, 'python.pip: pip_install_single', silent = true, mode = { 'n', 'v', }, },
+  ['<leader>ppia'] = { function() M.pip_install_all() end, 'python.pip: pip_install_all', silent = true, mode = { 'n', 'v', }, },
   ['<leader>ppu'] = { name = 'python.pip.uninstall/upgrade', },
   ['<leader>ppui'] = { function() M.pip_uninstall() end, 'python.pip: pip_uninstall', silent = true, mode = { 'n', 'v', }, },
   ['<leader>ppug'] = { function() M.pip_upgrade() end, 'python.pip: pip_upgrade', silent = true, mode = { 'n', 'v', }, },
