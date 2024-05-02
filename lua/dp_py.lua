@@ -91,8 +91,8 @@ function M.pip()
     B.system_run('start', 'pip uninstall %s && pause', module)
   end
 
-  function M.pip_list()
-    B.system_run('start', 'pip list && pause')
+  function M.pip_show_list()
+    B.system_run('asyncrun', 'pip list')
   end
 
   function M.pip_upgrade()
@@ -136,7 +136,8 @@ require 'which-key'.register {
   ['<leader>ppu'] = { name = 'python.pip.uninstall/upgrade', },
   ['<leader>ppui'] = { function() M.pip_uninstall() end, 'python.pip: pip_uninstall', silent = true, mode = { 'n', 'v', }, },
   ['<leader>ppug'] = { function() M.pip_upgrade() end, 'python.pip: pip_upgrade', silent = true, mode = { 'n', 'v', }, },
-  ['<leader>ppl'] = { function() M.pip_list() end, 'python.pip: pip_list', silent = true, mode = { 'n', 'v', }, },
+  ['<leader>pps'] = {name='python.pip.sow'},
+  ['<leader>ppsl'] = { function() M.pip_show_list() end, 'python.pip: pip_show_list', silent = true, mode = { 'n', 'v', }, },
   ['<leader>ppc'] = { name = 'python.pip.copycmd', },
   ['<leader>ppci'] = { function() M.pip_copycmd 'install' end, 'python.pip.copycmd: install', silent = true, mode = { 'n', 'v', }, },
   ['<leader>ppcu'] = { function() M.pip_copycmd 'uninstall' end, 'python.pip.copycmd: uninstall', silent = true, mode = { 'n', 'v', }, },
