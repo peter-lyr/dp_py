@@ -19,7 +19,7 @@ M.pip_install_flag = '-i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host
 
 M.list = {
   'neovim',
-  'pypiwin32'
+  'pypiwin32',
 }
 
 function M.run_in()
@@ -51,6 +51,11 @@ function M.run_in()
       vim.api.nvim_win_set_height(0, lines > max and max or lines)
       vim.cmd 'norm zb'
     end)
+  end
+
+  function M.run_in_outside()
+    local file = B.rep(B.buf_get_name())
+    B.system_run('start', '%s && pause', file)
   end
 end
 
@@ -118,6 +123,7 @@ require 'which-key'.register {
   ['<leader>prc'] = { function() M.run_in_cmdline() end, 'python.run: run_in_cmdline', silent = true, mode = { 'n', 'v', }, },
   ['<leader>prt'] = { function() M.run_in_terminal() end, 'python.run: run_in_terminal', silent = true, mode = { 'n', 'v', }, },
   ['<leader>pra'] = { function() M.run_in_asyncrun() end, 'python.run: run_in_asyncrun', silent = true, mode = { 'n', 'v', }, },
+  ['<leader>pro'] = { function() M.run_in_outside() end, 'python.run: run_in_outside', silent = true, mode = { 'n', 'v', }, },
 }
 
 M.run_sel_py()
@@ -130,13 +136,13 @@ M.pip()
 
 require 'which-key'.register {
   ['<leader>pp'] = { name = 'python.pip', },
-  ['<leader>ppi'] = {name='python.pip.install'},
+  ['<leader>ppi'] = { name = 'python.pip.install', },
   ['<leader>ppis'] = { function() M.pip_install_single() end, 'python.pip: pip_install_single', silent = true, mode = { 'n', 'v', }, },
   ['<leader>ppia'] = { function() M.pip_install_all() end, 'python.pip: pip_install_all', silent = true, mode = { 'n', 'v', }, },
   ['<leader>ppu'] = { name = 'python.pip.uninstall/upgrade', },
   ['<leader>ppui'] = { function() M.pip_uninstall() end, 'python.pip: pip_uninstall', silent = true, mode = { 'n', 'v', }, },
   ['<leader>ppug'] = { function() M.pip_upgrade() end, 'python.pip: pip_upgrade', silent = true, mode = { 'n', 'v', }, },
-  ['<leader>pps'] = {name='python.pip.sow'},
+  ['<leader>pps'] = { name = 'python.pip.sow', },
   ['<leader>ppsl'] = { function() M.pip_show_list() end, 'python.pip: pip_show_list', silent = true, mode = { 'n', 'v', }, },
   ['<leader>ppc'] = { name = 'python.pip.copycmd', },
   ['<leader>ppci'] = { function() M.pip_copycmd 'install' end, 'python.pip.copycmd: install', silent = true, mode = { 'n', 'v', }, },
