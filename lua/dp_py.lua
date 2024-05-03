@@ -22,12 +22,25 @@ M.list = {
   'pypiwin32',
 }
 
+function M.is_buf_python()
+  if B.is_buf_fts { 'python', } then
+    return 1
+  end
+  B.print('Is not python file: %s', B.buf_get_name())
+end
+
 function M.run_in()
   function M.run_in_cmdline()
+    if not M.is_buf_python() then
+      return
+    end
     B.cmd('!chcp 65001 && %s', B.rep(B.buf_get_name()))
   end
 
   function M.run_in_terminal()
+    if not M.is_buf_python() then
+      return
+    end
     local file = B.rep(B.buf_get_name())
     vim.cmd 'wincmd s'
     local _sta, _ = pcall(vim.cmd, 'te')
@@ -41,6 +54,9 @@ function M.run_in()
   end
 
   function M.run_in_asyncrun()
+    if not M.is_buf_python() then
+      return
+    end
     local file = B.rep(B.buf_get_name())
     B.cmd('AsyncRun %s', file)
     vim.cmd 'copen'
@@ -54,6 +70,9 @@ function M.run_in()
   end
 
   function M.run_in_outside()
+    if not M.is_buf_python() then
+      return
+    end
     local file = B.rep(B.buf_get_name())
     B.system_run('start', '%s && pause', file)
   end
