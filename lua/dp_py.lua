@@ -20,6 +20,7 @@ M.pip_install_flag = '-i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host
 M.list = {
   'neovim',
   'pypiwin32',
+  'numpy',
 }
 
 function M.is_buf_python()
