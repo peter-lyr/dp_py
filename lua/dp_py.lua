@@ -22,6 +22,7 @@ M.list = {
   'pypiwin32',
   'numpy',
   'luadata',
+  'pillow',
 }
 
 function M.is_buf_python()
