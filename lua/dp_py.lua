@@ -21,6 +21,7 @@ M.list = {
   'neovim',
   'pypiwin32',
   'numpy',
+  'luadata',
 }
 
 function M.is_buf_python()
