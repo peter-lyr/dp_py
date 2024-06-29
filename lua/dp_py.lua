@@ -143,6 +143,12 @@ function M.pyinstaller()
     local fname = vim.fn.fnamemodify(file, ':p:t:r')
     B.system_run('start', '%s && taskkill /f /im %s.exe & pyinstaller -F -w %s.py && pause', B.system_cd(file), fname, fname)
   end
+
+  function M.pyinstaller_run_in_dist()
+    local file = B.rep(B.buf_get_name())
+    local fname = vim.fn.fnamemodify(file, ':p:t:r')
+    B.system_run('start', '%s && cd dist & %s && pause', B.system_cd(file), fname)
+  end
 end
 
 M.run_in()
@@ -184,6 +190,7 @@ M.pyinstaller()
 require 'which-key'.register {
   ['<leader>pi'] = { name = 'python.pyinstaller', },
   ['<leader>pic'] = { function() M.pyinstaller_cur() end, 'python.pyinstaller: cur', silent = true, mode = { 'n', 'v', }, },
+  ['<leader>pir'] = { function() M.pyinstaller_run_in_dist() end, 'python.pyinstaller: run_in_dist', silent = true, mode = { 'n', 'v', }, },
 }
 
 return M
