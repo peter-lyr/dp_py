@@ -137,6 +137,14 @@ function M.pip()
   end
 end
 
+function M.pyinstaller()
+  function M.pyinstaller_cur()
+    local file = B.rep(B.buf_get_name())
+    local fname = vim.fn.fnamemodify(file, ':p:t:r')
+    B.system_run('start', '%s && taskkill /f /im %s.exe & pyinstaller -F -w %s.py && pause', B.system_cd(file), fname, fname)
+  end
+end
+
 M.run_in()
 
 require 'which-key'.register {
@@ -169,6 +177,13 @@ require 'which-key'.register {
   ['<leader>ppc'] = { name = 'python.pip.copycmd', },
   ['<leader>ppci'] = { function() M.pip_copycmd 'install' end, 'python.pip.copycmd: install', silent = true, mode = { 'n', 'v', }, },
   ['<leader>ppcu'] = { function() M.pip_copycmd 'uninstall' end, 'python.pip.copycmd: uninstall', silent = true, mode = { 'n', 'v', }, },
+}
+
+M.pyinstaller()
+
+require 'which-key'.register {
+  ['<leader>pi'] = { name = 'python.pyinstaller', },
+  ['<leader>pic'] = { function() M.pyinstaller_cur() end, 'python.pyinstaller: cur', silent = true, mode = { 'n', 'v', }, },
 }
 
 return M
