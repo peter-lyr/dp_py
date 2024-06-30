@@ -170,7 +170,7 @@ function M.pyinstaller()
     local build_dir = B.get_dir { cur_dir, 'build', }
     if B.is_sure('Sure to clean under "%s" named with "%s" pattern', cur_dir, fname) then
       vim.fn.system(string.format('taskkill /f /im %s.exe', fname))
-      B.delele_patt_under_dir(fname, cur_dir)
+      B.delele_patt_under_dir(fname .. '.spec', cur_dir)
       B.delele_patt_under_dir(fname, dist_dir)
       B.delele_patt_under_dir(fname, build_dir)
     end
