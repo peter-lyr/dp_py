@@ -153,7 +153,7 @@ function M.pyinstaller()
   function M.pyinstaller_stop_in_dist()
     local file = B.rep(B.buf_get_name())
     local fname = vim.fn.fnamemodify(file, ':p:t:r')
-    B.system_run('start', 'taskkill /f /im %s.exe', fname)
+    B.system_run('start', 'taskkill /f /im %s.exe && pause', fname)
   end
 end
 
