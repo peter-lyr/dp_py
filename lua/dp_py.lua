@@ -138,7 +138,7 @@ function M.pip()
 end
 
 function M.pyinstaller()
-  function M.pyinstaller_cur()
+  function M.pyinstaller_build()
     local file = B.rep(B.buf_get_name())
     local fname = vim.fn.fnamemodify(file, ':p:t:r')
     B.system_run('start', '%s && taskkill /f /im %s.exe & pyinstaller -F -w %s.py && pause', B.system_cd(file), fname, fname)
@@ -150,10 +150,23 @@ function M.pyinstaller()
     B.system_run('start', '%s && cd dist & %s && pause', B.system_cd(file), fname)
   end
 
+  function M.pyinstaller_build_and_run()
+    local file = B.rep(B.buf_get_name())
+    local fname = vim.fn.fnamemodify(file, ':p:t:r')
+    B.system_run('start', '%s && taskkill /f /im %s.exe & pyinstaller -F -w %s.py && cd dist && start /min /b %s.exe & pause', B.system_cd(file), fname, fname, fname)
+  end
+
   function M.pyinstaller_stop_in_dist()
     local file = B.rep(B.buf_get_name())
     local fname = vim.fn.fnamemodify(file, ':p:t:r')
     B.system_run('start', 'taskkill /f /im %s.exe && pause', fname)
+  end
+
+  function M.pyinstaller_clean()
+    local file = B.rep(B.buf_get_name())
+    local fname = vim.fn.fnamemodify(file, ':p:t:r')
+    B.system_run('start', 'taskkill /f /im %s.exe', fname)
+    B.delele_patt_under_dir('', B.get_dir { B.file_parent(), 'dist', })
   end
 end
 
@@ -195,9 +208,11 @@ M.pyinstaller()
 
 require 'which-key'.register {
   ['<leader>pi'] = { name = 'python.pyinstaller', },
-  ['<leader>pic'] = { function() M.pyinstaller_cur() end, 'python.pyinstaller: cur', silent = true, mode = { 'n', 'v', }, },
+  ['<leader>pib'] = { function() M.pyinstaller_build() end, 'python.pyinstaller: build', silent = true, mode = { 'n', 'v', }, },
+  ['<leader>pia'] = { function() M.pyinstaller_build_and_run() end, 'python.pyinstaller: build and run', silent = true, mode = { 'n', 'v', }, },
   ['<leader>pir'] = { function() M.pyinstaller_run_in_dist() end, 'python.pyinstaller: run_in_dist', silent = true, mode = { 'n', 'v', }, },
   ['<leader>pis'] = { function() M.pyinstaller_stop_in_dist() end, 'python.pyinstaller: stop', silent = true, mode = { 'n', 'v', }, },
+  ['<leader>pic'] = { function() M.pyinstaller_clean() end, 'python.pyinstaller: clean', silent = true, mode = { 'n', 'v', }, },
 }
 
 return M
