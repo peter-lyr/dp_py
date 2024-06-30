@@ -165,8 +165,11 @@ function M.pyinstaller()
   function M.pyinstaller_clean()
     local file = B.rep(B.buf_get_name())
     local fname = vim.fn.fnamemodify(file, ':p:t:r')
-    vim.fn.system(string.format('taskkill /f /im %s.exe', fname))
-    B.delele_patt_under_dir('', B.get_dir { B.file_parent(), 'dist', })
+    local dist = B.get_dir { B.file_parent(), 'dist', }
+    if B.is_sure('Sure to clean under "%s" named with "%s" pattern', dist, fname) then
+      vim.fn.system(string.format('taskkill /f /im %s.exe', fname))
+      B.delele_patt_under_dir('', dist)
+    end
   end
 end
 
