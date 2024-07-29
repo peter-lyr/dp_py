@@ -141,19 +141,19 @@ function M.pyinstaller()
   function M.pyinstaller_build()
     local file = B.rep(B.buf_get_name())
     local fname = vim.fn.fnamemodify(file, ':p:t:r')
-    B.system_run('start', '%s && taskkill /f /im %s.exe & pyinstaller -F -w %s.py && pause', B.system_cd(file), fname, fname)
+    B.system_run('start', '%s && taskkill /f /im %s.exe & pyinstaller -F -w %s.py && copy /y dist\\%s.exe %s.exe & pause', B.system_cd(file), fname, fname, fname, fname)
   end
 
   function M.pyinstaller_run_in_dist()
     local file = B.rep(B.buf_get_name())
     local fname = vim.fn.fnamemodify(file, ':p:t:r')
-    B.system_run('start', '%s && cd dist & %s && pause', B.system_cd(file), fname)
+    B.system_run('start', '%s && %s && pause', B.system_cd(file), fname)
   end
 
   function M.pyinstaller_build_and_run()
     local file = B.rep(B.buf_get_name())
     local fname = vim.fn.fnamemodify(file, ':p:t:r')
-    B.system_run('start', '%s && taskkill /f /im %s.exe & pyinstaller -F -w %s.py && cd dist && start /min /b %s.exe & pause', B.system_cd(file), fname, fname, fname)
+    B.system_run('start', '%s && taskkill /f /im %s.exe & pyinstaller -F -w %s.py && copy /y dist\\%s.exe %s.exe && start /min /b %s.exe & pause', B.system_cd(file), fname, fname, fname, fname, fname)
   end
 
   function M.pyinstaller_stop_in_dist()
