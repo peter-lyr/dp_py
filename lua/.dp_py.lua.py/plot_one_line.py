@@ -32,7 +32,8 @@ def get_number_pattern():
     return number
 
 
-patt = get_number_pattern()
+# patt = get_number_pattern()
+patt = re.compile('[0-9a-fA-F]{2}') # 240824-15h27m 只处理一个字节的16进制
 
 
 def get_nums_list_from_file(file):
@@ -45,7 +46,8 @@ def get_nums_list_from_file(file):
         if not m:
             continue
         try:
-            num = eval(m[0])
+            # num = eval(m[0])
+            num = eval('0x' + m[0]) # 240824-15h28m
             numbers.append(num)
         except Exception as e:
             print(e)
