@@ -61,7 +61,9 @@ def main():
             return
     else:
         return
-    plt.plot(y)
+    x = [i for i in range(len(y))]
+    plt.plot(x, y)
+    plt.scatter(x, y)
     plt.show()
 
 
